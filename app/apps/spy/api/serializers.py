@@ -34,7 +34,11 @@ class MissionListSerializer(serializers.ModelSerializer):
 
 class MissionPostSerializer(serializers.ModelSerializer):
     targets = TargetListSerializer(many=True, write_only=True)
-    cat = serializers.PrimaryKeyRelatedField(queryset=SpyCat.objects.all())
+    cat = serializers.PrimaryKeyRelatedField(
+        queryset=SpyCat.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         model = Mission
