@@ -57,7 +57,7 @@ A Django REST API for managing **Spy Cats**, **Missions**, and **Targets** in a 
 
 ## 🚀 API Endpoints Collection
 
-https://.postman.co/workspace/My-Workspace~fd87af34-8156-4a5c-8fda-aef4c1ea92dd/collection/28122193-d90b292e-a1b4-4844-80ca-ec740a5bf499?action=share&creator=28122193
+https://surl.li/zmzdvw
 
 ### 🐾 SpyCat Endpoints
 
