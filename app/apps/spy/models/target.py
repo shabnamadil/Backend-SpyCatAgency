@@ -19,11 +19,11 @@ class Target(Base):
     class Meta:
         verbose_name = "Target"
         verbose_name_plural = "Targets"
-        unique_together = ('id', 'mission')
+        unique_together = ('name', 'id', 'mission')
 
     def __str__(self):
         return self.name
     
     def clean(self):
-        if self.is_completed or self.mission.is_completed:
+        if self.is_completed and self.mission.is_completed:
             raise ValidationError("Notes cannot be updated if the target and mission is completed.")

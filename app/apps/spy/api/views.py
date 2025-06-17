@@ -1,11 +1,16 @@
-from django.core.exceptions import ValidationError
-from .serializers  import CatListSerializer, CatPostSerializer, MissionPostSerializer, MissionListSerializer, TargetListSerializer
+from .serializers  import (
+    CatListSerializer, 
+    CatPostSerializer, 
+    MissionPostSerializer, 
+    MissionListSerializer, 
+    TargetListSerializer
+)
 
 from rest_framework.generics import (
-    ListAPIView,
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
 )
+
 from apps.spy.models import SpyCat, Mission, Target
 from rest_framework.response import Response
 from rest_framework import status
@@ -49,11 +54,32 @@ class MissionRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = MissionListSerializer
 
     def update(self, request, *args, **kwargs):
-        # Only allow updating is_completed
-        allowed_fields = ['is_completed']
+        allowed_fields = ['is_completed', 'cat']
+        mission = self.get_object()
+
         for field in request.data.keys():
             if field not in allowed_fields:
-                return Response({'error': 'Only is_completed can be updated.'}, status=400)
+                return Response(
+                    {'error': 'Only is_completed and cat fields can be updated.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        # Validate cat if provided
+        if 'cat' in request.data and request.data['cat'] is not None:
+            cat_id = request.data['cat']
+            try:
+                cat = SpyCat.objects.get(id=cat_id)
+                if cat.missions.exclude(id=mission.id).exists():
+                    return Response(
+                        {'error': 'This SpyCat is already assigned to another mission.'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            except SpyCat.DoesNotExist:
+                return Response(
+                    {'error': 'Invalid SpyCat ID.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
         return super().update(request, *args, **kwargs)
     
     def destroy(self, request, *args, **kwargs):

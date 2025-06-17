@@ -44,6 +44,20 @@ class MissionPostSerializer(serializers.ModelSerializer):
         model = Mission
         fields = ['id','is_completed', 'cat', 'targets']
 
+    def validate_cat(self, value):
+        if value is None:
+            return value
+        if value.missions.exists():
+            raise serializers.ValidationError("This SpyCat is already assigned to a mission.")
+        return value
+
+    def validate_targets(self, value):
+        if not value:
+            raise serializers.ValidationError("At least one target is required.")
+        if len(value) > 3:
+            raise serializers.ValidationError("A maximum of three targets is allowed.")
+        return value
+
     def create(self, validated_data):
         targets_data = validated_data.pop('targets')
         mission = Mission.objects.create(**validated_data)

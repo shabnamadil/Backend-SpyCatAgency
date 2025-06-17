@@ -50,7 +50,7 @@ class SpyCat(Base):
         ("turkish_van", "Turkish Van"),
     ]
 
-    name = models.CharField(max_length=100, verbose_name="SpyCat Name")
+    name = models.CharField(max_length=100, unique=True, verbose_name="SpyCat Name")
     experience = models.PositiveIntegerField(default=0, verbose_name="Experience (in years)")
     breed = models.CharField(choices=BREED_CHOICES, max_length=40, verbose_name="Breed")
     salary = models.DecimalField(max_digits=10, decimal_places=2)
