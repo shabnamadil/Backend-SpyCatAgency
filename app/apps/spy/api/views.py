@@ -5,6 +5,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .serializers import (
     CatListSerializer,
@@ -96,3 +97,11 @@ class TargetRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         if target.is_completed and target.mission.is_completed:
             return Response({"error": "Cannot delete a completed target."}, status=400)
         return super().destroy(request, *args, **kwargs)
+
+
+class SpyCatBreedChoicesAPIView(APIView):
+    def get(self, request):
+        choices = [
+            {"value": key, "label": label} for key, label in SpyCat.BREED_CHOICES
+        ]
+        return Response(choices, status=status.HTTP_200_OK)
