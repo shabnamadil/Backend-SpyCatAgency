@@ -1,6 +1,8 @@
-from utils.models.base_model import Base
-from django.db import models    
 from django.core.exceptions import ValidationError
+from django.db import models
+
+from utils.base_model import Base
+
 
 class SpyCat(Base):
     """Model representing a cat in the SpyCat agency."""
@@ -51,7 +53,9 @@ class SpyCat(Base):
     ]
 
     name = models.CharField(max_length=100, unique=True, verbose_name="SpyCat Name")
-    experience = models.PositiveIntegerField(default=0, verbose_name="Experience (in years)")
+    experience = models.PositiveIntegerField(
+        default=0, verbose_name="Experience (in years)"
+    )
     breed = models.CharField(choices=BREED_CHOICES, max_length=40, verbose_name="Breed")
     salary = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -62,7 +66,6 @@ class SpyCat(Base):
     def clean(self):
         if self.breed not in dict(self.BREED_CHOICES):
             raise ValidationError("It is not a valid breed choice.")
-
 
     def __str__(self):
         return self.name

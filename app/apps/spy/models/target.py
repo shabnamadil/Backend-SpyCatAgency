@@ -1,7 +1,9 @@
 from django.db import models
 from django.forms import ValidationError
-from utils.models.base_model import Base
+
 from apps.spy.models import Mission
+from utils.base_model import Base
+
 
 class Target(Base):
     """Model representing a target in the SpyCat agency."""
@@ -11,19 +13,19 @@ class Target(Base):
     notes = models.TextField(verbose_name="Notes", blank=True, null=True)
     is_completed = models.BooleanField(default=False, verbose_name="Target Completed")
     mission = models.ForeignKey(
-        Mission,
-        on_delete=models.CASCADE,
-        related_name="targets"
+        Mission, on_delete=models.CASCADE, related_name="targets"
     )
 
     class Meta:
         verbose_name = "Target"
         verbose_name_plural = "Targets"
-        unique_together = ('name', 'id', 'mission')
+        unique_together = ("name", "id", "mission")
 
     def __str__(self):
         return self.name
-    
+
     def clean(self):
         if self.is_completed and self.mission.is_completed:
-            raise ValidationError("Notes cannot be updated if the target and mission is completed.")
+            raise ValidationError(
+                "Notes cannot be updated if the target and mission is completed."
+            )

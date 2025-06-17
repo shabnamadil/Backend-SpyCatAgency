@@ -1,11 +1,18 @@
-from utils.models.base_model import Base
 from django.db import models
+
 from apps.spy.models import SpyCat
-from django.core.exceptions import ValidationError
+from utils.base_model import Base
+
 
 class Mission(Base):
     is_completed = models.BooleanField(default=False, verbose_name="Mission Completed")
-    cat = models.ForeignKey(SpyCat, on_delete=models.SET_NULL, null=True, blank=True, related_name="missions")
+    cat = models.ForeignKey(
+        SpyCat,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="missions",
+    )
 
     class Meta:
         verbose_name = "Mission"

@@ -22,7 +22,7 @@ format:
 	$(PYTHON) -m autopep8 $(PROJECT_DIR) --global-config $(SETTINGS_FILE)
 
 lint:
-	$(PYTHON) -m flake8 --config $(SETTINGS_FILE) $(PROJECT_DIR)
+	flake8 --config=.flake8.cfg
 	$(PYTHON) -m black $(PROJECT_DIR) --check --diff --config $(SETTINGS_FILE)
 	$(PYTHON) -m isort $(PROJECT_DIR) --check --diff --settings $(SETTINGS_FILE)
 
