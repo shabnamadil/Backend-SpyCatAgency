@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from .serializers  import CatListSerializer, CatPostSerializer, MissionPostSerializer, MissionListSerializer
 
 from rest_framework.generics import (
@@ -54,3 +55,9 @@ class MissionRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
             if field not in allowed_fields:
                 return Response({'error': 'Only is_completed can be updated.'}, status=400)
         return super().update(request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.cat:
+            raise ValidationError("Cannot delete a mission that has a cat assigned.")
+        return super().destroy(request, *args, **kwargs)
